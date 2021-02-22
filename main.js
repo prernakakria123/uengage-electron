@@ -38,6 +38,11 @@ app.on('activate', function () {
     createWindow();
   }
 });
+autoUpdater.setFeedURL({
+  "provider": "github",
+  "owner": "prerna",
+  "repo": "uengage-electron"
+});
 
 ipcMain.on('app_version', (event) => {
   event.sender.send('app_version', { version: app.getVersion() });
@@ -67,11 +72,6 @@ autoUpdater.on('update-downloaded', () => {
 });
 ipcMain.on('restart_app', () => {
   autoUpdater.quitAndInstall();
-});
-autoUpdater.setFeedURL({
-  "provider": "github",
-  "owner": "prerna",
-  "repo": "uengage-electron"
 });
 app.on('ready', function () {
   autoUpdater.checkForUpdatesAndNotify();
