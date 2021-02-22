@@ -3,7 +3,7 @@
     "appId": "com.example.ElectronAutoUpdate"
   },
   "name": "electron-update",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "main.js",
   "license": "MIT",
   "dependencies": {
