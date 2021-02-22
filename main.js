@@ -7,7 +7,7 @@ autoUpdater.setFeedURL({
   "provider": "github",
   "owner": "prerna",
   "repo": "uengage-electron",
-  "token": "666df9e470055479eea966fb697e60e0a7d67ebe"
+  "url":"https://github.com/prernakakria123/uengage-electron.git"
 });
 setInterval(() => {
   console.log("checking..");
