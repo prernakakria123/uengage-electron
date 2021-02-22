@@ -14,6 +14,9 @@ function createWindow () {
   mainWindow.on('closed', function () {
     mainWindow = null;
   });
+
+    autoUpdater.checkForUpdatesAndNotify();
+ 
 }
 
 app.on('ready', () => {
@@ -31,9 +34,9 @@ app.on('activate', function () {
     createWindow();
   }
 });
-app.on("ready", () => {
-	autoUpdater.checkForUpdatesAndNotify();
-});
+// app.on("ready", () => {
+// 	autoUpdater.checkForUpdatesAndNotify();
+// });
 
 ipcMain.on('app_version', (event) => {
   event.sender.send('app_version', { version: app.getVersion() });
