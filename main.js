@@ -104,6 +104,7 @@ autoUpdater.on('update-downloaded', (ev, info) => {
 // Wait a second for the window to exist before checking for updates.
 //autoUpdater.setFeedURL('http://127.0.0.1:8080/');
 setTimeout(function() {
+  console.log("checking");
   log.info('starting update check');
   autoUpdater.checkForUpdates()  
 }, 1000);
