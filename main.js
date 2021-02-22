@@ -1,110 +1,75 @@
-// Copyright (c) The LHTML team
-// See LICENSE for details.
-
-const {app, BrowserWindow, Menu, protocol, ipcMain, autoUpdater} = require('electron');
+require('update-electron-app')()
+const { app, BrowserWindow, ipcMain,autoUpdater,dialog } = require('electron');
 const log = require('electron-log');
-
-//-------------------------------------------------------------------
-// Logging
-//
-// This logging setup is not required for auto-updates to work,
-// but it sure makes debugging easier :)
-//-------------------------------------------------------------------
-autoUpdater.logger = log;
-autoUpdater.logger.transports.file.level = 'info';
-log.info('App starting...');
-
-//-------------------------------------------------------------------
-// Define the menu
-//-------------------------------------------------------------------
-let template = []
-if (process.platform === 'darwin') {
-  // OS X
-  const name = app.getName();
-  template.unshift({
-    label: name,
-    submenu: [
-      {
-        label: 'About ' + name,
-        role: 'about'
-      },
-      {
-        label: 'Quit',
-        accelerator: 'Command+Q',
-        click() { app.quit(); }
-      },
-    ]
-  })
-}
-
-
-//-------------------------------------------------------------------
-// Open a window that displays the version
-//-------------------------------------------------------------------
-let win;
-function createDefaultWindow() {
-  win = new BrowserWindow();
-  win.webContents.openDevTools();
-  win.on('closed', () => {
-    win = null;
+let mainWindow;
+autoUpdater.setFeedURL({
+  "provider": "github",
+  "url":"https://github.com/prernakakria123/uengage-electron.git",
+  "owner": "prerna",
+  "repo": "uengage-electron"
+});
+setInterval(() => {
+  console.log("checking..");
+  autoUpdater.checkForUpdates()
+}, 60000)
+function createWindow() {
+  mainWindow = new BrowserWindow({
+    width: 800,
+    height: 600,
+    webPreferences: {
+      nodeIntegration: true,
+    },
   });
-  win.loadURL(`file://${__dirname}/index.html#v${app.getVersion()}`);
-  return win;
+  mainWindow.loadFile('index.html');
+  mainWindow.on('closed', function () {
+    mainWindow = null;
+  });
+  //   mainWindow.once('ready-to-show', () => {
+  //   autoUpdater.checkForUpdatesAndNotify();
+  // });
 }
 
-app.on('ready', function() {
-  // Create the Menu
-  const menu = Menu.buildFromTemplate(template);
-  Menu.setApplicationMenu(menu);
-
-  createDefaultWindow();
+app.on('ready', () => {
+  createWindow();
 });
 
-app.on('window-all-closed', () => {
-  app.quit();
-});
-
-function sendStatus(text) {
-  log.info(text);
-  if (win) {
-    win.webContents.send('message', text);
+app.on('window-all-closed', function () {
+  if (process.platform !== 'darwin') {
+    app.quit();
   }
-}
+});
 
-//-------------------------------------------------------------------
-// Auto updates
-//-------------------------------------------------------------------
+app.on('activate', function () {
+  if (mainWindow === null) {
+    createWindow();
+  }
+});
+
+
+ipcMain.on('app_version', (event) => {
+  event.sender.send('app_version', { version: app.getVersion() });
+});
 autoUpdater.on('checking-for-update', () => {
-  sendStatus('Checking for update...');
+  console.log("checking for updates");
 })
-autoUpdater.on('update-available', (ev, info) => {
-  sendStatus('Update available.');
-  log.info('info', info);
-  log.info('arguments', arguments);
+autoUpdater.on('update-available', () => {
+  console.log("Update Available");
+  mainWindow.webContents.send('update_available');
+});
+autoUpdater.on('update-not-available', () => {
+  console.log("Update Not Available", info.version);
+  mainWindow.webContents.send('update_available');
+});
+
+autoUpdater.on('error', (err) => {
+  console.log('Error in auto-updater. ' + err);
 })
-autoUpdater.on('update-not-available', (ev, info) => {
-  sendStatus('Update not available.');
-  log.info('info', info);
-  log.info('arguments', arguments);
-})
-autoUpdater.on('error', (ev, err) => {
-  sendStatus('Error in auto-updater.');
-  log.info('err', err);
-  log.info('arguments', arguments);
-})
-autoUpdater.on('update-downloaded', (ev, info) => {
-  sendStatus('Update downloaded.  Will quit and install in 5 seconds.');
-  log.info('info', info);
-  log.info('arguments', arguments);
-  // Wait 5 seconds, then quit and install
-  // setTimeout(function() {
-  //   autoUpdater.quitAndInstall();  
-  // }, 5000)
-})
-// Wait a second for the window to exist before checking for updates.
-//autoUpdater.setFeedURL('http://127.0.0.1:8080/');
-setTimeout(function() {
-  console.log("checking");
-  log.info('starting update check');
-  autoUpdater.checkForUpdates()  
-}, 1000);
+autoUpdater.on('update-downloaded', () => {
+  mainWindow.webContents.send('update_downloaded');
+});
+ipcMain.on('restart_app', () => {
+  autoUpdater.quitAndInstall();
+});
+app.on('ready', function () {
+  autoUpdater.checkForUpdatesAndNotify();
+});
