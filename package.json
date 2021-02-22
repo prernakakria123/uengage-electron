@@ -3,10 +3,11 @@
     "appId": "com.example.ElectronAutoUpdate"
   },
   "name": "electron-update",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "main.js",
   "license": "MIT",
   "dependencies": {
+    "electron-log": "^4.3.2",
     "electron-updater": "^4.3.5"
   },
   "devDependencies": {
@@ -14,13 +15,13 @@
     "electron-builder": "^22.9.1"
   },
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/prernakakria123/uengage-electron.git"
+    "type": "git",
+    "url": "https://github.com/prernakakria123/uengage-electron.git"
   },
   "scripts": {
     "start": "electron .",
     "postinstall": "electron-builder install-app-deps",
-		"build": "electron-builder  --windows",
-		"release": "electron-builder --windows --publish always"
+    "build": "electron-builder  --windows",
+    "release": "electron-builder --windows --publish always"
   }
 }
