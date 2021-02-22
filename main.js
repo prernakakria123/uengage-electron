@@ -65,7 +65,7 @@ autoUpdater.on('download-progress', (progressObj) => {
   console.log(log_message);
 })
 autoUpdater.on('error', (err) => {
-  sendStatusToWindow('Error in auto-updater. ' + err);
+  console.log('Error in auto-updater. ' + err);
 })
 autoUpdater.on('update-downloaded', () => {
   mainWindow.webContents.send('update_downloaded');
