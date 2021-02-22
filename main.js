@@ -4,6 +4,7 @@ const log = require('electron-log');
 let mainWindow;
 autoUpdater.setFeedURL({
   "provider": "github",
+  "url":"https://github.com/prernakakria123/uengage-electron.git",
   "owner": "prerna",
   "repo": "uengage-electron"
 });
