@@ -1,4 +1,7 @@
 {
+  "build": {
+    "appId": "com.example.ElectronAutoUpdate"
+  },
   "name": "electron-update",
   "version": "1.0.1",
   "main": "main.js",
@@ -18,6 +21,6 @@
     "start": "electron .",
     "postinstall": "electron-builder install-app-deps",
 		"build": "electron-builder  --windows",
-		"release": "electron-builder"
+		"release": "electron-builder --windows --publish always"
   }
 }
