@@ -2,17 +2,17 @@ require('update-electron-app')()
 const { app, BrowserWindow, ipcMain,autoUpdater,dialog } = require('electron');
 const log = require('electron-log');
 let mainWindow;
-autoUpdater.setFeedURL({
-  "provider": "github",
-  "url":"https://github.com/prernakakria123/uengage-electron.git",
-  "owner": "prerna",
-  "repo": "uengage-electron"
-});
-setInterval(() => {
-  console.log("checking..");
-  mainWindow.webContents.send('checking');
-  autoUpdater.checkForUpdates()
-}, 60000)
+// autoUpdater.setFeedURL({
+//   "provider": "github",
+//   "url":"https://github.com/prernakakria123/uengage-electron.git",
+//   "owner": "prerna",
+//   "repo": "uengage-electron"
+// });
+// setInterval(() => {
+//   console.log("checking..");
+//   mainWindow.webContents.send('checking');
+//   autoUpdater.checkForUpdates()
+// }, 60000)
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: 800,
@@ -25,9 +25,9 @@ function createWindow() {
   mainWindow.on('closed', function () {
     mainWindow = null;
   });
-  //   mainWindow.once('ready-to-show', () => {
-  //   autoUpdater.checkForUpdatesAndNotify();
-  // });
+    mainWindow.once('ready-to-show', () => {
+    autoUpdater.checkForUpdatesAndNotify();
+  });
 }
 
 app.on('ready', () => {
@@ -53,10 +53,6 @@ autoUpdater.on('checking-for-update', () => {
 })
 autoUpdater.on('update-available', () => {
   console.log("Update Available");
-  mainWindow.webContents.send('update_available');
-});
-autoUpdater.on('update-not-available', () => {
-  console.log("Update Not Available", info.version);
   mainWindow.webContents.send('update_available');
 });
 

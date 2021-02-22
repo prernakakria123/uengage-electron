@@ -50,14 +50,16 @@
 const message = document.getElementById('message');
 const restartButton = document.getElementById('restart-button');
 ipcRenderer.on('update_available', () => {
+  console.log("update available")
   ipcRenderer.removeAllListeners('update_available');
   message.innerText = 'A new update is available. Downloading now...';
   notification.classList.remove('hidden');
 });
-ipcRenderer.on('checking',()=>{
+ipcRenderer.on('checking-for-update',()=>{
   console.log("checking..")
 })
 ipcRenderer.on('update_downloaded', () => {
+  console.log("downloaded")
   ipcRenderer.removeAllListeners('update_downloaded');
   message.innerText = 'Update Downloaded. It will be installed on restart. Restart now?';
   restartButton.classList.remove('hidden');
