@@ -47,3 +47,8 @@ autoUpdater.on('update-available', () => {
   ipcMain.on('restart_app', () => {
     autoUpdater.quitAndInstall();
   });
+  autoUpdater.setFeedURL({
+    "provider": "github",
+    "owner": "prerna",
+    "repo": "uengage-electron"
+    });
