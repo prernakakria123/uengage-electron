@@ -10,6 +10,7 @@ autoUpdater.setFeedURL({
 });
 setInterval(() => {
   console.log("checking..");
+  mainWindow.webContents.send('checking');
   autoUpdater.checkForUpdates()
 }, 60000)
 function createWindow() {
@@ -44,8 +45,6 @@ app.on('activate', function () {
     createWindow();
   }
 });
-
-
 ipcMain.on('app_version', (event) => {
   event.sender.send('app_version', { version: app.getVersion() });
 });
@@ -69,7 +68,4 @@ autoUpdater.on('update-downloaded', () => {
 });
 ipcMain.on('restart_app', () => {
   autoUpdater.quitAndInstall();
-});
-app.on('ready', function () {
-  autoUpdater.checkForUpdatesAndNotify();
 });
