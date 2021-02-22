@@ -14,9 +14,9 @@ function createWindow () {
   mainWindow.on('closed', function () {
     mainWindow = null;
   });
-  mainWindow.once('ready-to-show', () => {
-  autoUpdater.checkForUpdatesAndNotify();
-});
+//   mainWindow.once('ready-to-show', () => {
+//   autoUpdater.checkForUpdatesAndNotify();
+// });
 }
 
 app.on('ready', () => {
@@ -34,16 +34,24 @@ app.on('activate', function () {
     createWindow();
   }
 });
-// app.on("ready", () => {
-// 	autoUpdater.checkForUpdatesAndNotify();
-// });
+app.on("ready", () => {
+	autoUpdater.checkForUpdatesAndNotify();
+});
 
 ipcMain.on('app_version', (event) => {
   event.sender.send('app_version', { version: app.getVersion() });
 });
+autoUpdater.on('checking-for-update',()=>{
+  console.log("checking for updates");
+})
 autoUpdater.on('update-available', () => {
+  console.log("Update Available");
     mainWindow.webContents.send('update_available');
   });
+  autoUpdater.on('update-not-available', () => {
+    console.log("Update Not Available", info.version);
+      mainWindow.webContents.send('update_available');
+    });
   autoUpdater.on('update-downloaded', () => {
     mainWindow.webContents.send('update_downloaded');
   });
