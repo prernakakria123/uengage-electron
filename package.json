@@ -8,7 +8,8 @@
   "license": "MIT",
   "dependencies": {
     "electron-log": "^4.3.2",
-    "electron-updater": "^4.3.5"
+    "electron-updater": "^4.3.5",
+    "update-electron-app": "^2.0.1"
   },
   "devDependencies": {
     "electron": "^11.3.0",
@@ -23,5 +24,14 @@
     "postinstall": "electron-builder install-app-deps",
     "build": "electron-builder  --windows",
     "release": "electron-builder --windows --publish always"
-  }
+  },
+  "target": [
+    {
+      "target": "nsis",
+      "arch": [
+        "x64",
+        "ia32"
+      ]
+    }
+  ]
 }
