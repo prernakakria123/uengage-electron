@@ -18,6 +18,6 @@
     "start": "electron .",
     "postinstall": "electron-builder install-app-deps",
 		"build": "electron-builder  --windows",
-		"release": "electron-builder --windows --publish always"
+		"release": "electron-builder"
   }
 }
