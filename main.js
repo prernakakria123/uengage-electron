@@ -66,9 +66,9 @@ app.on('activate', function () {
 ipcMain.on('app_version', (event) => {
   event.sender.send('app_version', { version: app.getVersion() });
 });
-autoUpdater.on('checking-for-update', () => {
-  console.log("checking for updates");
-})
+// autoUpdater.on('checking-for-update', () => {
+//   console.log("checking for updates");
+// })
 autoUpdater.on('update-available', () => {
   console.log("Update Available");
   mainWindow.webContents.send('update_available');
