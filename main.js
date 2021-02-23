@@ -3,12 +3,7 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 const { autoUpdater } = require('electron-updater');
 const log = require('electron-log');
 let mainWindow;
-// autoUpdater.setFeedURL({
-//   "provider": "github",
-//   "url":"https://github.com/prernakakria123/uengage-electron.git",
-//   "owner": "prerna",
-//   "repo": "uengage-electron"
-// });
+
 // setInterval(() => {
 //   console.log("checking..");
 //   mainWindow.webContents.send('checking');
@@ -51,6 +46,12 @@ autoUpdater.on('error', message => {
   console.error('There was a problem updating the application')
   console.error(message)
 })
+autoUpdater.setFeedURL({
+  "provider": "github",
+  "url":"https://github.com/prernakakria123/uengage-electron.git",
+  "owner": "prerna",
+  "repo": "uengage-electron"
+});
 
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') {
