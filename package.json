@@ -1,6 +1,21 @@
 {
   "build": {
-    "appId": "com.example.ElectronAutoUpdate"
+    "publish": {
+      "provider": "github",
+      "url": "https://github.com/prernakakria123/uengage-electron.git",
+      "token":"666df9e470055479eea966fb697e60e0a7d67ebe"
+    },
+    "appId": "com.example.ElectronAutoUpdate",
+    "mac": {
+      "category": "your.app.category.type",
+      "target": [
+        "zip",
+        "dmg"
+      ]
+    },
+    "nsis": {
+      "perMachine": true
+    }
   },
   "name": "electron-update",
   "version": "1.0.0",
