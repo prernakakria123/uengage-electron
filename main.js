@@ -3,12 +3,16 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 const { autoUpdater } = require('electron-updater');
 const log = require('electron-log');
 let mainWindow;
-
-// setInterval(() => {
-//   console.log("checking..");
-//   mainWindow.webContents.send('checking');
-//   autoUpdater.checkForUpdates()
-// }, 60000)
+autoUpdater.setFeedURL({
+  "provider": "github",
+  "owner": "prerna",
+  "repo": "uengage-electron"
+});
+setInterval(() => {
+  console.log("checking..");
+  mainWindow.webContents.send('checking');
+  autoUpdater.checkForUpdates()
+}, 60000)
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: 800,
@@ -46,12 +50,6 @@ autoUpdater.on('error', message => {
   console.error('There was a problem updating the application')
   console.error(message)
 })
-// autoUpdater.setFeedURL({
-//   "provider": "github",
-//   "url":"https://github.com/prernakakria123/uengage-electron.git",
-//   "owner": "prerna",
-//   "repo": "uengage-electron"
-// });
 
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') {
@@ -67,53 +65,20 @@ app.on('activate', function () {
 ipcMain.on('app_version', (event) => {
   event.sender.send('app_version', { version: app.getVersion() });
 });
-// autoUpdater.on('checking-for-update', () => {
-//   console.log("checking for updates");
-// })
-// autoUpdater.on('update-available', () => {
-//   console.log("Update Available");
-//   mainWindow.webContents.send('update_available');
-// });
-
-// autoUpdater.on('error', (err) => {
-//   console.log('Error in auto-updater. ' + err);
-// })
-// autoUpdater.on('update-downloaded', () => {
-//   mainWindow.webContents.send('update_downloaded');
-// });
-// ipcMain.on('restart_app', () => {
-//   autoUpdater.quitAndInstall();
-// });
 autoUpdater.on('checking-for-update', () => {
-  sendStatus('Checking for update...');
+  console.log("checking for updates");
 })
-autoUpdater.on('update-available', (ev, info) => {
-  sendStatus('Update available.');
-  log.info('info', info);
-  log.info('arguments', arguments);
+autoUpdater.on('update-available', () => {
+  console.log("Update Available");
+  mainWindow.webContents.send('update_available');
+});
+
+autoUpdater.on('error', (err) => {
+  console.log('Error in auto-updater. ' + err);
 })
-autoUpdater.on('update-not-available', (ev, info) => {
-  sendStatus('Update not available.');
-  log.info('info', info);
-  log.info('arguments', arguments);
-})
-autoUpdater.on('error', (ev, err) => {
-  sendStatus('Error in auto-updater.');
-  log.info('err', err);
-  log.info('arguments', arguments);
-})
-autoUpdater.on('update-downloaded', (ev, info) => {
-  sendStatus('Update downloaded.  Will quit and install in 5 seconds.');
-  log.info('info', info);
-  log.info('arguments', arguments);
-  // Wait 5 seconds, then quit and install
-  // setTimeout(function() {
-  //   autoUpdater.quitAndInstall();  
-  // }, 5000)
-})
-// Wait a second for the window to exist before checking for updates.
-//autoUpdater.setFeedURL('http://127.0.0.1:8080/');
-setTimeout(function() {
-  log.info('starting update check');
-  autoUpdater.checkForUpdates()  
-}, 1000);
+autoUpdater.on('update-downloaded', () => {
+  mainWindow.webContents.send('update_downloaded');
+});
+ipcMain.on('restart_app', () => {
+  autoUpdater.quitAndInstall();
+});
